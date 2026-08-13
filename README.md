@@ -1,4 +1,4 @@
 # Cloud Computing Laboratory
-Student Name:
+Student Name: Trần Hoài Nam
 Student ID:
 Class:
