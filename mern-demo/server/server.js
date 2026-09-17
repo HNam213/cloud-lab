@@ -12,7 +12,10 @@ const PORT = process.env.PORT || 5000;
 // Cho phép React Frontend từ Codespaces kết nối đến Backend
 app.use(
     cors({
-        origin: "https://laughing-doodle-wr9gpgpx6px5h99xj-5173.app.github.dev",
+        origin: [
+            "http://localhost:5173",
+            "https://laughing-doodle-wr9gpgpx6px5h99xj-5173.app.github.dev"
+        ],
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type"]
     })
