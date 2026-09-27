@@ -252,7 +252,7 @@ function App() {
 
       <hr />
 
-      <h1>Danh sách sinh viên</h1>
+      <h1>Hiển thị danh sách sinh viên</h1>
 
       <table border="1" cellPadding="10">
         <thead>
