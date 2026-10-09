@@ -8,6 +8,10 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5173,
 
+    allowedHosts: [
+      "mern-frontend-235991.onrender.com"
+    ],
+
     proxy: {
       "/api": {
         target: "http://localhost:5000",

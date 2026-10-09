@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+const API_URL =
+  "https://mern-backend-235991.onrender.com/api/students";
+
 function App() {
   const [students, setStudents] = useState([]);
 
@@ -16,9 +19,7 @@ function App() {
   // =========================
   const loadStudents = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/students"
-      );
+      const response = await fetch(API_URL);
 
       const data = await response.json();
 
@@ -44,16 +45,13 @@ function App() {
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/students",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(student),
-        }
-      );
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(student),
+      });
 
       const data = await response.json();
 
@@ -84,16 +82,13 @@ function App() {
     };
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/students/${editId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(student),
-        }
-      );
+      const response = await fetch(`${API_URL}/${editId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(student),
+      });
 
       const data = await response.json();
 
@@ -128,12 +123,9 @@ function App() {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/students/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
 
       const data = await response.json();
 
