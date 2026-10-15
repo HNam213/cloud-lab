@@ -182,3 +182,36 @@
     border-right-color: var(--border);
   }
 }
+
+
+/* =========================
+   Phiên bản ứng dụng v2.0
+   ========================= */
+.version-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  background-color: #f0fdf4;
+  border-bottom: 2px solid #22c55e;
+  font-weight: bold;
+}
+
+.version-badge {
+  padding: 6px 12px;
+  color: #166534;
+  background-color: #dcfce7;
+  border: 1px solid #86efac;
+  border-radius: 20px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .version-banner {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+}

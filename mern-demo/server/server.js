@@ -35,13 +35,13 @@ app.use((req, res, next) => {
     const time = new Date().toISOString();
 
     console.log(
-        `[${time}] ${req.method} ${req.originalUrl}`
+        `[CI/CD TEST] [${time}] ${req.method} ${req.originalUrl}`
     );
 
     // Ghi log trạng thái phản hồi sau khi hoàn tất
     res.on("finish", () => {
         console.log(
-            `[${time}] ${req.method} ${req.originalUrl} - Status: ${res.statusCode}`
+            `[CI/CD TEST] [${time}] ${req.method} ${req.originalUrl} - Status: ${res.statusCode}`
         );
     });
 
@@ -65,6 +65,17 @@ mongoose
 // =========================
 app.get("/", (req, res) => {
     res.send("Express Server is running!");
+});
+
+// =========================
+// API Health Check - Câu 44
+// =========================
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "UP",
+        timestamp: new Date(),
+        uptime: process.uptime()
+    });
 });
 
 // =========================
@@ -98,7 +109,7 @@ app.post("/api/students", async (req, res) => {
     try {
         const student = await Student.create(req.body);
 
-        console.log("Đã thêm sinh viên:", student._id);
+        console.log("[CI/CD TEST] Đã thêm sinh viên:", student._id);
 
         res.status(201).json(student);
     } catch (error) {
@@ -130,7 +141,7 @@ app.put("/api/students/:id", async (req, res) => {
             });
         }
 
-        console.log("Đã cập nhật sinh viên:", student._id);
+        console.log("[CI/CD TEST] Đã cập nhật sinh viên:", student._id);
 
         res.json(student);
     } catch (error) {
@@ -157,7 +168,7 @@ app.delete("/api/students/:id", async (req, res) => {
             });
         }
 
-        console.log("Đã xóa sinh viên:", student._id);
+        console.log("[CI/CD TEST] Đã xóa sinh viên:", student._id);
 
         res.json({
             message: "Student deleted successfully",
@@ -176,5 +187,5 @@ app.delete("/api/students/:id", async (req, res) => {
 // Khởi động Server
 // =========================
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`[CI/CD TEST] Server is running on port ${PORT}`);
 });

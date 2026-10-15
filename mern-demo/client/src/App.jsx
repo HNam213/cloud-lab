@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-const API_URL =
-  "https://mern-backend-235991.onrender.com/api/students";
+// API thông qua Nginx Reverse Proxy
+const API_URL = "/api/students";
+
+// Phiên bản ứng dụng
+const APP_VERSION = "v2.0";
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -21,18 +24,30 @@ function App() {
     try {
       const response = await fetch(API_URL);
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
 
+      const data = await response.json();
       setStudents(data);
     } catch (error) {
       console.error("Lỗi tải danh sách:", error);
     }
   };
 
-  // Khi mở trang
+  // Tải danh sách khi mở trang
   useEffect(() => {
     loadStudents();
   }, []);
+
+  // =========================
+  // Xóa dữ liệu trên form
+  // =========================
+  const clearForm = () => {
+    setMssv("");
+    setHoTen("");
+    setEmail("");
+  };
 
   // =========================
   // POST - Thêm sinh viên
@@ -57,16 +72,13 @@ function App() {
 
       if (response.ok) {
         alert("Thêm sinh viên thành công!");
-
         clearForm();
-
-        // Tải lại danh sách
-        loadStudents();
+        await loadStudents();
       } else {
-        alert("Lỗi: " + data.message);
+        alert("Lỗi: " + (data.message || "Không thể thêm sinh viên"));
       }
     } catch (error) {
-      console.error("Lỗi:", error);
+      console.error("Lỗi thêm sinh viên:", error);
       alert("Không thể kết nối đến Server!");
     }
   };
@@ -94,18 +106,14 @@ function App() {
 
       if (response.ok) {
         alert("Cập nhật sinh viên thành công!");
-
         clearForm();
-
         setEditId(null);
-
-        // Tải lại danh sách
-        loadStudents();
+        await loadStudents();
       } else {
-        alert("Lỗi: " + data.message);
+        alert("Lỗi: " + (data.message || "Không thể cập nhật sinh viên"));
       }
     } catch (error) {
-      console.error("Lỗi:", error);
+      console.error("Lỗi cập nhật sinh viên:", error);
       alert("Không thể kết nối đến Server!");
     }
   };
@@ -131,14 +139,12 @@ function App() {
 
       if (response.ok) {
         alert("Xóa sinh viên thành công!");
-
-        // Tải lại danh sách
-        loadStudents();
+        await loadStudents();
       } else {
-        alert("Lỗi: " + data.message);
+        alert("Lỗi: " + (data.message || "Không thể xóa sinh viên"));
       }
     } catch (error) {
-      console.error("Lỗi:", error);
+      console.error("Lỗi xóa sinh viên:", error);
       alert("Không thể kết nối đến Server!");
     }
   };
@@ -150,17 +156,7 @@ function App() {
     setMssv(student.studentId);
     setHoTen(student.name);
     setEmail(student.email);
-
     setEditId(student._id);
-  };
-
-  // =========================
-  // Xóa dữ liệu trên form
-  // =========================
-  const clearForm = () => {
-    setMssv("");
-    setHoTen("");
-    setEmail("");
   };
 
   // =========================
@@ -176,16 +172,23 @@ function App() {
     }
   };
 
+  // =========================
+  // Giao diện phiên bản v2.0
+  // =========================
   return (
     <div>
-      <h1>
-        {editId ? "Cập nhật sinh viên" : "Thêm sinh viên"}
-      </h1>
+      <div className="version-banner">
+        <span>QUẢN LÝ SINH VIÊN</span>
+        <span className="version-badge">
+          Phiên bản {APP_VERSION}
+        </span>
+      </div>
+
+      <h1>{editId ? "Cập nhật sinh viên" : "Thêm sinh viên"}</h1>
 
       <form onSubmit={handleSubmit}>
         <div>
           <label>MSSV: </label>
-
           <input
             type="text"
             value={mssv}
@@ -199,7 +202,6 @@ function App() {
 
         <div>
           <label>Họ tên: </label>
-
           <input
             type="text"
             value={hoTen}
@@ -213,7 +215,6 @@ function App() {
 
         <div>
           <label>Email: </label>
-
           <input
             type="email"
             value={email}
@@ -260,24 +261,19 @@ function App() {
           {students.map((student) => (
             <tr key={student._id}>
               <td>{student.studentId}</td>
-
               <td>{student.name}</td>
-
               <td>{student.email}</td>
-
               <td>
                 <button
+                  type="button"
                   onClick={() => editStudent(student)}
                 >
                   Sửa
-                </button>
-
-                {" "}
+                </button>{" "}
 
                 <button
-                  onClick={() =>
-                    deleteStudent(student._id)
-                  }
+                  type="button"
+                  onClick={() => deleteStudent(student._id)}
                 >
                   Xóa
                 </button>
